@@ -95,70 +95,15 @@ rice() {
 	installi3=$?
 	clear
 
-	dialog --stdout --yesno "Install KDE" 0 0
-	installKDE=$?
-	clear
-
 	[ $timeFix -eq 0 ] && sudo timedatectl set-local-rtc true --adjust-system-clock
 	clear
 
 	git clone https://aur.archlinux.org/yay.git; cd yay; makepkg --noconfirm -si; cd; rm -rf yay
 
-	git clone https://github.com/HCThomas/dotfiles
-	cp -rfT dotfiles ~
-	rm README.md .gitignore .git
-
-	# xorg-server - graphical server
-	# xorg-xinit - starts the graphical server
-	# pulseaudio - audio
-	# pulseaudio-alsa - audio
-	# alsa-utils - audio
-	# pulseaudio-bluetooth - bluetooth
-	# bluez - bluetooth
-	# bluez-utils - bluetooth
-	# noto-fonts-cjk - asian fonts
-	# A, nerd-fonts-source-code-pro - terminal fonts
-	# ttf-font-awesome - emojis
-	# ttf-joypixels - emojis
-	# reflector - update pacman mirrors
-	# xdg-user-dirs - creates home directories
-	# ntfs-3g - mounting windows ntfs drives
-	# p7zip - compressing and uncompressing files
-	# openssh - ssh
-	# rsync - syncing
-	# zsh - better shell
-	# A, zsh-fast-syntax-highlighting - zsh shell syntax highlighting
-	# dash - faster scrips
-	# A, dashbinsh - makes dash bin/sh
-	# htop - system monitor
-	# A, gotop - system monitor
-	# neofetch - system information
-	# alacritty - terminal
-	# mpv - video player
-	# sxiv - image view
-	# fzf - terminal fuzzy finder
-	# bc - terminal calculator
-	# A, brave-bin - web browser
-	# A, libxft-bgra - replaces libxfit for fixing some stuff
-	# A, lf - terminal file manager
-	# A, vidir - bulk rename on directories
-	# arc-gtk-theme - arc gtk theme
-	# breeze-icons - breeze icon theme
-	# pcmanfm-gtk3 - gui file manager
-	# gvfs - allows for pcmanfm to show mounted drives
-	# G, dmenu - runs commands
-	# G, dwm - suckless window manager
-	# G, dwmblock - status bar for dwm
-	# slock - screen locker
-	# brightnessctl - chaning screen brightness
-	# pamixer - easer audio commands
-	# pulsemixer - terminal application for audio
-	# dunst - suckless notification system
-	# libnotify - allows for desktop notifications
-	# picom - transparancy
-	# xwallpaper - setting wallpaper
-	# xclip - copying and pasting from commandline
-	# maim - screen shots
+	mkdir .dotfiles
+	git clone --bare git@git.holdenthomas.xyz:/var/www/git/dotfiles.git ~/.dotfiles
+	alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+	config checkout
 
 	sudo pacman --noconfirm --needed -S xorg-server xorg-xinit xwallpaper xclip brightnessctl pulseaudio pulseaudio-alsa alsa-utils pulseaudio-bluetooth bluez bluez-utils pamixer pulsemixer noto-fonts-cjk ttf-font-awesome ttf-joypixels dunst libnotify picom reflector xdg-user-dirs ntfs-3g p7zip slock openssh rsync zsh dash fzf bc htop neofetch mpv sxiv pcmanfm-gtk gvfs arc-gtk-theme breeze-icons maim
 	yay -S --noconfirm brave-bin gotop zsh-fast-syntax-highlighting dashbinsh lf vidir
@@ -168,29 +113,14 @@ rice() {
 	xdg-user-dirs-update
 	sudo systemctl enable bluetooth
 
-	git clone https://github.com/HCThomas/dmenu ~/.local/src && cd ~/.local/src/dmenu && sudo make clean install && cd
-	git clone https://github.com/HCThomas/dwm ~/.local/src && cd ~/.local/src/dwm && sudo make clean install && cd
-	git clone https://github.com/HCThomas/dwmblocks ~/.local/src && cd ~/.local/src/dwmblocks && sudo make clean install && cd
-	git clone https://github.com/HCThomas/lukest ~/.local/src && cd ~/.local/src/lukest && sudo make clean install && cd
-
-	# i3-gaps - window manager
-	# A, autotiling - auto tile i3 windows
-	# i3-blocks - i3 bar
-	# i3-lock - lock screen
-	# xss-lock - locking the screen when screen goes off
-	# lxappearance - change gtk theme
+	git clone git@git.holdenthomas.xyz:/var/www/git/dmenu.git ~/.local/src && cd ~/.local/src/dmenu && sudo make clean install && cd
+	git clone git@git.holdenthomas.xyz:/var/www/git/dwm.git ~/.local/src && cd ~/.local/src/dwm && sudo make clean install && cd
+	git clone https://github.com/HCThomas/dwmblocks.git ~/.local/src && cd ~/.local/src/dwmblocks && sudo make clean install && cd
+	git clone https://github.com/HCThomas/st.git ~/.local/src && cd ~/.local/src/st && sudo make clean install && cd
 
 	if [ $installi3 -eq 0 ]; then
 		sudo pacman --noconfirm --needed -S i3-gaps i3blocks i3lock xss-lock lxappearance
 		yay -S --noconfirm autotiling nerd-fonts-source-code-pro
-	fi
-
-
-	if [ $installKDE -eq 0 ]; then
-		sudo pacman --noconfirm --needed -S plasma konsole yakuake dolphin
-		mkdir -p ~/.local/share/kglobalaccel
-		echo -n "Enable sddm(y,n): "; read enableSddm
-		[ $enableSddm = y ] && sudo systemctl enable sddm
 	fi
 }
 
