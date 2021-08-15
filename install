@@ -104,6 +104,7 @@ rice() {
 	git clone --bare git@git.holdenthomas.xyz:/var/www/git/dotfiles.git ~/.dotfiles
 	alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 	config checkout
+	config config status.showUntrackedFiles no
 
 	sudo pacman --noconfirm --needed -S xorg-server xorg-xinit xwallpaper xclip brightnessctl pulseaudio pulseaudio-alsa alsa-utils pulseaudio-bluetooth bluez bluez-utils pamixer pulsemixer noto-fonts-cjk ttf-font-awesome ttf-joypixels dunst libnotify picom reflector xdg-user-dirs ntfs-3g p7zip slock openssh rsync zsh dash fzf bc htop neofetch mpv sxiv pcmanfm-gtk gvfs arc-gtk-theme breeze-icons maim
 	yay -S --noconfirm brave-bin gotop zsh-fast-syntax-highlighting dashbinsh lf vidir
