@@ -95,6 +95,10 @@ rice() {
 	installi3=$?
 	clear
 
+	dialog --stdout --yesno "Install extra packages" 0 0
+	installEx=$?
+	clear
+
 	[ $timeFix -eq 0 ] && sudo timedatectl set-local-rtc true --adjust-system-clock
 	clear
 
@@ -106,7 +110,7 @@ rice() {
 	config checkout
 	config config status.showUntrackedFiles no
 
-	sudo pacman --noconfirm --needed -S xorg-server xorg-xinit xwallpaper xclip brightnessctl pulseaudio pulseaudio-alsa alsa-utils pulseaudio-bluetooth bluez bluez-utils pamixer pulsemixer noto-fonts-cjk ttf-font-awesome ttf-joypixels dunst libnotify picom reflector xdg-user-dirs ntfs-3g p7zip slock openssh rsync zsh dash fzf bc htop neofetch mpv sxiv pcmanfm gvfs arc-gtk-theme breeze-icons maim sxhkd
+	sudo pacman --noconfirm --needed -S xorg-server xorg-xinit xwallpaper xclip brightnessctl pulseaudio pulseaudio-alsa alsa-utils pulseaudio-bluetooth bluez bluez-utils pamixer pulsemixer noto-fonts-cjk ttf-font-awesome ttf-joypixels dunst libnotify picom reflector xdg-user-dirs ntfs-3g cifs-utils android-file-transfer p7zip slock openssh rsync zsh dash fzf bc htop neofetch mpv sxiv pcmanfm gvfs arc-gtk-theme breeze-icons maim sxhkd
 	yay -S --noconfirm brave-bin gotop zsh-fast-syntax-highlighting dashbinsh lf vidir devour
 	yes | yay -S libxft-bgra
 	chsh -s /usr/bin/zsh
@@ -114,10 +118,16 @@ rice() {
 	xdg-user-dirs-update
 	sudo systemctl enable bluetooth
 
-	git clone git@git.holdenthomas.xyz:/var/www/git/dmenu.git ~/.local/src && cd ~/.local/src/dmenu && sudo make clean install && cd
-	git clone git@git.holdenthomas.xyz:/var/www/git/dwm.git ~/.local/src && cd ~/.local/src/dwm && sudo make clean install && cd
-	git clone https://github.com/HCThomas/dwmblocks.git ~/.local/src && cd ~/.local/src/dwmblocks && sudo make clean install && cd
-	git clone https://github.com/HCThomas/st.git ~/.local/src && cd ~/.local/src/st && sudo make clean install && cd
+	git clone git@git.holdenthomas.xyz:/var/www/git/dmenu.git ~/.local/src/dmenu && cd ~/.local/src/dmenu && sudo make clean install && cd
+	git clone git@git.holdenthomas.xyz:/var/www/git/dwm.git ~/.local/src/dwm && cd ~/.local/src/dwm && sudo make clean install && cd
+	git clone https://github.com/HCThomas/dwmblocks.git ~/.local/src/dwmblocks && cd ~/.local/src/dwmblocks && sudo make clean install && cd
+	git clone https://github.com/HCThomas/st.git ~/.local/src/st && cd ~/.local/src/st && sudo make clean install && cd
+
+	if [ $installEx -eq 0 ]; then
+		sudo pacman --noconfirm --needed keepassxc code steam discord qbittorrent calibre thunderbird nextcloud-client youtube-dl networkmanager-openvpn network-manager-applet liquidctl cups ghostscripts
+		yay --noconfirm hakuneko-desktop freefilesync-bin epson-inkjet-printer-escpr
+		systemctl enable cups
+	fi
 
 	if [ $installi3 -eq 0 ]; then
 		sudo pacman --noconfirm --needed -S i3-gaps i3blocks i3lock xss-lock lxappearance
