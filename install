@@ -120,8 +120,8 @@ rice() {
 
 	git clone git@git.holdenthomas.xyz:/var/www/git/dmenu.git ~/.local/src/dmenu && cd ~/.local/src/dmenu && sudo make clean install && cd
 	git clone git@git.holdenthomas.xyz:/var/www/git/dwm.git ~/.local/src/dwm && cd ~/.local/src/dwm && sudo make clean install && cd
-	git clone https://github.com/HCThomas/dwmblocks.git ~/.local/src/dwmblocks && cd ~/.local/src/dwmblocks && sudo make clean install && cd
-	git clone https://github.com/HCThomas/st.git ~/.local/src/st && cd ~/.local/src/st && sudo make clean install && cd
+	git clone git@git.holdenthomas.xyz:/var/www/git/dwmblocks.git ~/.local/src/dwmblocks && cd ~/.local/src/dwmblocks && sudo make clean install && cd
+	git clone git@git.holdenthomas.xyz:/var/www/git/st.git ~/.local/src/st && cd ~/.local/src/st && sudo make clean install && cd
 
 	if [ $installEx -eq 0 ]; then
 		sudo pacman --noconfirm --needed keepassxc code steam discord qbittorrent calibre thunderbird nextcloud-client youtube-dl networkmanager-openvpn network-manager-applet liquidctl cups ghostscripts
