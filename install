@@ -106,7 +106,7 @@ rice() {
 
 	mkdir .dotfiles
 	git clone --bare git@git.holdenthomas.xyz:/var/www/git/dotfiles.git ~/.dotfiles
-	alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+	alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 	config checkout
 	config config status.showUntrackedFiles no
 
