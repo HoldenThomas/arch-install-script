@@ -91,10 +91,6 @@ rice() {
 	timeFix=$?
 	clear
 
-	dialog --stdout --yesno "Install i3" 0 0
-	installi3=$?
-	clear
-
 	dialog --stdout --yesno "Install extra packages" 0 0
 	installEx=$?
 	clear
@@ -127,11 +123,6 @@ rice() {
 		sudo pacman --noconfirm --needed keepassxc code steam discord qbittorrent calibre thunderbird nextcloud-client youtube-dl networkmanager-openvpn network-manager-applet liquidctl cups ghostscripts
 		yay --noconfirm hakuneko-desktop freefilesync-bin epson-inkjet-printer-escpr
 		systemctl enable cups
-	fi
-
-	if [ $installi3 -eq 0 ]; then
-		sudo pacman --noconfirm --needed -S i3-gaps i3blocks i3lock xss-lock lxappearance
-		yay -S --noconfirm autotiling nerd-fonts-source-code-pro
 	fi
 }
 
