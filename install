@@ -101,7 +101,7 @@ rice() {
 	git clone https://aur.archlinux.org/yay.git; cd yay; makepkg --noconfirm -si; cd; rm -rf yay
 
 	mkdir .dotfiles
-	git clone --bare git@git.holdenthomas.xyz:/var/www/git/dotfiles.git ~/.dotfiles
+	git clone --bare git://git.holdenthomas.xyz/dotfiles ~/.dotfiles
 	alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 	config checkout
 	config config status.showUntrackedFiles no
@@ -114,13 +114,13 @@ rice() {
 	xdg-user-dirs-update
 	sudo systemctl enable bluetooth
 
-	git clone git@git.holdenthomas.xyz:/var/www/git/dmenu.git ~/.local/src/dmenu && cd ~/.local/src/dmenu && sudo make clean install && cd
-	git clone git@git.holdenthomas.xyz:/var/www/git/dwm.git ~/.local/src/dwm && cd ~/.local/src/dwm && sudo make clean install && cd
-	git clone git@git.holdenthomas.xyz:/var/www/git/dwmblocks.git ~/.local/src/dwmblocks && cd ~/.local/src/dwmblocks && sudo make clean install && cd
-	git clone git@git.holdenthomas.xyz:/var/www/git/st.git ~/.local/src/st && cd ~/.local/src/st && sudo make clean install && cd
+	git clone git://git.holdenthomas.xyz/dmenu ~/.local/src && cd ~/.local/src/dmenu && sudo make clean install && cd
+	git clone git://git.holdenthomas.xyz/dwm ~/.local/src && cd ~/.local/src/dwm && sudo make clean install && cd
+	git clone git://git.holdenthomas.xyz/dwmblocks ~/.local/src && cd ~/.local/src/dwmblocks && sudo make clean install && cd
+	git clone git://git.holdenthomas.xyz/st ~/.local/src && cd ~/.local/src/st && sudo make clean install && cd
 
 	if [ $installEx -eq 0 ]; then
-		sudo pacman --noconfirm --needed keepassxc code steam discord qbittorrent calibre thunderbird nextcloud-client youtube-dl networkmanager-openvpn network-manager-applet liquidctl cups ghostscripts
+		sudo pacman --noconfirm --needed keepassxc code steam discord qbittorrent calibre thunderbird nextcloud-client youtube-dl networkmanager-openvpn network-manager-applet liquidctl cups ghostscripts mcomix liferea
 		yay --noconfirm hakuneko-desktop freefilesync-bin epson-inkjet-printer-escpr
 		systemctl enable cups
 	fi
