@@ -106,7 +106,7 @@ rice() {
 	config checkout
 	config config status.showUntrackedFiles no
 
-	sudo pacman --noconfirm --needed -S xorg-server xorg-xinit xwallpaper xclip brightnessctl pulseaudio pulseaudio-alsa alsa-utils pulseaudio-bluetooth bluez bluez-utils pamixer pulsemixer noto-fonts-cjk ttf-font-awesome ttf-joypixels dunst libnotify picom reflector xdg-user-dirs ntfs-3g cifs-utils android-file-transfer p7zip slock openssh rsync zsh dash fzf bc htop neofetch mpv sxiv pcmanfm gvfs arc-gtk-theme breeze-icons maim sxhkd
+	sudo pacman --noconfirm --needed -S xorg-server xorg-xinit xwallpaper xclip brightnessctl pulseaudio pulseaudio-alsa alsa-utils pulseaudio-bluetooth bluez bluez-utils pamixer pulsemixer noto-fonts-cjk ttf-font-awesome ttf-joypixels dunst libnotify picom reflector xdg-user-dirs ntfs-3g cifs-utils android-file-transfer p7zip slock openssh rsync zsh dash fzf bc htop neofetch mpv sxiv pcmanfm gvfs arc-gtk-theme breeze-icons maim sxhkd xcape
 	yay -S --noconfirm brave-bin gotop zsh-fast-syntax-highlighting dashbinsh lf vidir devour
 	yes | yay -S libxft-bgra
 	chsh -s /usr/bin/zsh
