@@ -70,7 +70,7 @@ baseArch() {
 	[ $virtualBox -eq 0 ] && pacstrap /mnt virtualbox-guest-utils && arch-chroot /mnt systemctl enable vboxservice
 
 	arch-chroot /mnt useradd -m -G wheel,audio,disk,input,kvm,optical,scanner,storage,video $user
-	sed -i "82 s/^##*//" /mnt/etc/sudoers
+	sed -i "82 s/^##*//;85 s/# %wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: /usr/bin/mount,/usr/bin/umount,/usr/bin/pacman,/usr/bin/systemctl,/usr/bin/make,/usr/bin/nvim" /mnt/etc/sudoers
 	echo -e "${password}\n${password}" | arch-chroot /mnt passwd
 	echo -e "${password}\n${password}" | arch-chroot /mnt passwd $user
 
