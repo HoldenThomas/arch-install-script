@@ -106,27 +106,141 @@ rice() {
 	config checkout
 	config config status.showUntrackedFiles no
 
-	sudo pacman --noconfirm --needed -S xorg-server xorg-xinit xwallpaper xclip brightnessctl pulseaudio pulseaudio-alsa alsa-utils pulseaudio-bluetooth bluez bluez-utils pamixer pulsemixer noto-fonts-cjk ttf-font-awesome ttf-joypixels dunst libnotify picom reflector xdg-user-dirs ntfs-3g cifs-utils android-file-transfer p7zip slock openssh rsync zsh dash fzf bc htop neofetch mpv sxiv pcmanfm gvfs arc-gtk-theme breeze-icons maim sxhkd xcape
-	yay -S --noconfirm brave-bin gotop zsh-fast-syntax-highlighting dashbinsh lf vidir devour
+	options=()
+	options+=("xorg-server" "graphical server" on)
+	options+=("xorg-xinit" "starting graphical server" on)
+	options+=("xwallpaper" "setting wallpaper" on)
+	options+=("xclip" "c&p from cl" on)
+	options+=("xcape" "remapping escape/super" on)
+	options+=("sxhkd" "universal shortcuts" on)
+	options+=("arandr" "change monitor arragement" on)
+	options+=("brightnessctl" "control screen brightness" on)
+	options+=("pulseaudio-alsa" "audio system" on)
+	options+=("pulsemixer" "audio controller" on)
+	options+=("pamixer" "cl audio interface" on)
+	options+=("alsa-utils" "bluetooth" on)
+	options+=("pulseaudio-bluetooth" "bluetooth" on)
+	options+=("bluez" "bluetooth" on)
+	options+=("bluez-utils" "bluetooth" on)
+	options+=("noto-fonts-cjk" "asian fonts" on)
+	options+=("ttf-font-awesome" "emojis" on)
+	options+=("ttf-joypixels" "emojis" on)
+	options+=("dunst" "notification system" on)
+	options+=("libnotify" "desktop notifications" on)
+	options+=("picom" "transparency" on)
+	options+=("reflector" "updating pacman mirrors" on)
+	options+=("ntfs-3g" "accessing ntfs-partitions" on)
+	options+=("cifs-utils" "accessing smba shares" on)
+	options+=("android-file-transfer" "accessing android devices" on)
+	options+=("p7zip" "extracting & archiving" on)
+	options+=("slock" "screen locking" on)
+	options+=("openssh" "ssh" on)
+	options+=("rsync" "syncing" on)
+	options+=("zsh" "shell" on)
+	options+=("dash" "faster /bin/sh" on)
+	options+=("fzf" "fuzzy finder" on)
+	options+=("bc" "cl calulator" on)
+	options+=("htop" "system monitor" on)
+	options+=("neofetch" "display system info" on)
+	options+=("mpv" "media player" on)
+	options+=("sxiv" "image viewer" on)
+	options+=("pcmanfm" "gui file manager" on)
+	options+=("gvfs" "allows pcmanfm to show other drives" on)
+	options+=("arc-gtk-theme" "GTK theme" on)
+	options+=("breeze-icons" "GTK icons theme" on)
+	options+=("maim" "screenshots" on)
+	options+=("mediainfo" "showing media info" on)
+	options+=("youtube-dl" "downloading youtube videos" on)
+	options+=("keepassxc" "password manager" off)
+	options+=("code" "microsoft code" off)
+	options+=("steam" "videogames client" off)
+	options+=("discord" "discord client" off)
+	options+=("qbittorrent" "torrent client" off)
+	options+=("calibre" "book reader" off)
+	options+=("thunderbird" "email client" off)
+	options+=("nextcloud-client" "nextcloud client" off)
+	options+=("networkmanager-openvpn" "configuring openvpn" off)
+	options+=("network-manager-applet" "configuring openvpn" off)
+	options+=("liquidctl" "kraken cpu cooler control" off)
+	options+=("cups" "printer" off)
+	options+=("ghostscript" "printer" off)
+	options+=("mcomix" "manga reader" off)
+	options+=("liferea" "rss reader" off)
+
+	optionsA=()
+	optionsA+=("zsh-fast-syntax-highlighting" "shell syntax highlighting" on)
+	optionsA+=("dashbinsh" "adds dash to /bin/sh" on)
+	optionsA+=("gotop" "system monitor" on)
+	optionsA+=("lf" "cl file manager" on)
+	optionsA+=("brave-bin" "internet browser" on)
+	optionsA+=("vidir" "cl bulkrename utility" on)
+	optionsA+=("devour" "cl application swallowing" on)
+	optionsA+=("hakuneko-desktop" "manga downloader" off)
+	optionsA+=("freefilesync-bin" "syncing client" off)
+	optionsA+=("epson-inkjet-printer-escpr" "printer driver" off)
+
+	optionsG=()
+	optionsG+=("dwmblocks" "status bar" on)
+	optionsG+=("dmenu" "menu and command runner" on)
+	optionsG+=("st" "suckless's terminal by Luke Smith" on)
+	optionsG+=("dwm" "mysuckless's window manager build" on)
+
+	sel=$(whiptail --backtitle "$apptitle" --title "Pacman Applications :" --checklist "Choose what you want" --cancel-button "Back" 0 0 0 \
+	  "${options[@]}" \
+	  3>&1 1>&2 2>&3)
+	if [ ! "$?" = "0" ]; then
+	  exit 1
+	fi
+	for itm in $sel; do
+	  case $itm in
+	    *) pkg="$pkg $(echo $itm | sed 's/"//g')";;
+	  esac
+	done
+
+	selA=$(whiptail --backtitle "$apptitle" --title "AUR Applications :" --checklist "Choose what you want" --cancel-button "Back" 0 0 0 \
+	  "${optionsA[@]}" \
+	  3>&1 1>&2 2>&3)
+	if [ ! "$?" = "0" ]; then
+	  exit 1
+	fi
+	for itm in $selA; do
+	  case $itm in
+	    *) pkgA="$pkgA $(echo $itm | sed 's/"//g')";;
+	  esac
+	done
+
+	selG=$(whiptail --backtitle "$apptitle" --title "Git Applications :" --checklist "Choose what you want" --cancel-button "Back" 0 0 0 \
+	  "${optionsG[@]}" \
+	  3>&1 1>&2 2>&3)
+	if [ ! "$?" = "0" ]; then
+	  exit 1
+	fi
+	for itm in $selG; do
+	  case $itm in
+	    *) pkgG="$pkgG $(echo $itm | sed 's/"//g')";;
+	  esac
+	done
+
+	sudo pacman --noconfirm --needed -S $pkg
+	yay -S --noconfirm $pkgA
+	for item in $pkgG; do
+		git clone git://git.holdenthomas.xyz/$item ~/.local/src && ~/.local/src/$item && sudo make clean install && cd
+	done
+
+	for itm in $sel; do
+	  case $itm in
+	    '"cups"') sudo systemctl enable cups;;
+	  esac
+	done
+
 	yes | yay -S libxft-bgra
 	chsh -s /usr/bin/zsh
 	mkdir -p ~/.cache/zsh
 	xdg-user-dirs-update
 	sudo systemctl enable bluetooth
-
-	git clone git://git.holdenthomas.xyz/dmenu ~/.local/src && cd ~/.local/src/dmenu && sudo make clean install && cd
-	git clone git://git.holdenthomas.xyz/dwm ~/.local/src && cd ~/.local/src/dwm && sudo make clean install && cd
-	git clone git://git.holdenthomas.xyz/dwmblocks ~/.local/src && cd ~/.local/src/dwmblocks && sudo make clean install && cd
-	git clone git://git.holdenthomas.xyz/st ~/.local/src && cd ~/.local/src/st && sudo make clean install && cd
-
-	if [ $installEx -eq 0 ]; then
-		sudo pacman --noconfirm --needed keepassxc code steam discord qbittorrent calibre thunderbird nextcloud-client youtube-dl networkmanager-openvpn network-manager-applet liquidctl cups ghostscripts mcomix liferea
-		yay --noconfirm hakuneko-desktop freefilesync-bin epson-inkjet-printer-escpr
-		systemctl enable cups
-	fi
 }
 
-sudo pacman --noconfirm --needed -Sy dialog
+sudo pacman --noconfirm --needed -Sy dialog libnewt
 dialog --stdout --title "Welcome" --msgbox "Welcome to Holden's arch install and rice script!" 0 0
 clear
 
