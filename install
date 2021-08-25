@@ -166,6 +166,11 @@ rice() {
 	options+=("ghostscript" "printer" off)
 	options+=("mcomix" "manga reader" off)
 	options+=("liferea" "rss reader" off)
+	options+=("zathura" "document viewer" off)
+	options+=("zathura-mupdf" "allows zathura to view epub,pdf,xps" off)
+	options+=("zathura-cb" "allows zathura to view comics" off)
+	options+=("texlive-most" "LaTeX for creating documents" off)
+	options+=("biber" "create bibliographies in LaTeX" off)
 
 	optionsA=()
 	optionsA+=("zsh-fast-syntax-highlighting" "shell syntax highlighting" on)
