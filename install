@@ -70,7 +70,7 @@ baseArch() {
 	[ $virtualBox -eq 0 ] && pacstrap /mnt virtualbox-guest-utils && arch-chroot /mnt systemctl enable vboxservice
 
 	arch-chroot /mnt useradd -m -G wheel,audio,disk,input,kvm,optical,scanner,storage,video $user
-	sed -i "82 s/^##*//;85 s/# %wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: /usr/bin/mount,/usr/bin/umount,/usr/bin/pacman,/usr/bin/systemctl,/usr/bin/make,/usr/bin/nvim" /mnt/etc/sudoers
+	sed -i "82 s/^##*//;s|# %wheel ALL=(ALL) NOPASSWD: ALL|%wheel ALL=(ALL) NOPASSWD: /usr/bin/mount,/usr/bin/umount,/usr/bin/pacman,/usr/bin/systemctl,/usr/bin/make,/usr/bin/nvim|" /mnt/etc/sudoers
 	echo -e "${password}\n${password}" | arch-chroot /mnt passwd
 	echo -e "${password}\n${password}" | arch-chroot /mnt passwd $user
 
@@ -89,10 +89,6 @@ baseArch() {
 rice() {
 	dialog --stdout --yesno "If dualbooting windows, fix time" 0 0
 	timeFix=$?
-	clear
-
-	dialog --stdout --yesno "Install extra packages" 0 0
-	installEx=$?
 	clear
 
 	[ $timeFix -eq 0 ] && sudo timedatectl set-local-rtc true --adjust-system-clock
@@ -229,7 +225,7 @@ rice() {
 	sudo pacman --noconfirm --needed -S $pkg
 	yay -S --noconfirm $pkgA
 	for item in $pkgG; do
-		git clone git://git.holdenthomas.xyz/$item ~/.local/src && ~/.local/src/$item && sudo make clean install && cd
+		git clone git://git.holdenthomas.xyz/$item ~/.local/src/$item && ~/.local/src/$item && sudo make clean install && cd
 	done
 
 	for itm in $sel; do
@@ -241,7 +237,6 @@ rice() {
 	yes | yay -S libxft-bgra
 	chsh -s /usr/bin/zsh
 	mkdir -p ~/.cache/zsh
-	xdg-user-dirs-update
 	sudo systemctl enable bluetooth
 }
 
