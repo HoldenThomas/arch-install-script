@@ -140,7 +140,7 @@ rice() {
 	options+=("neofetch" "display system info" on)
 	options+=("mpv" "media player" on)
 	options+=("sxiv" "image viewer" on)
-	options+=("pcmanfm" "gui file manager" on)
+	options+=("pcmanfm-gtk3" "gui file manager" on)
 	options+=("gvfs" "allows pcmanfm to show other drives" on)
 	options+=("arc-gtk-theme" "GTK theme" on)
 	options+=("breeze-icons" "GTK icons theme" on)
