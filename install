@@ -149,6 +149,8 @@ rice() {
 	options+=("youtube-dl" "downloading youtube videos" on)
 	options+=("keepassxc" "password manager" on)
 	options+=("nextcloud-client" "nextcloud client" on)
+	options+=("gnome-keyring" "for storing application passwords" on)
+	options+=("seahorse" "for editing gnome-keyrings" on)
 	options+=("liferea" "rss reader" on)
 	options+=("zathura" "document viewer" on)
 	options+=("zathura-mupdf" "allows zathura to view epub,pdf,xps" on)

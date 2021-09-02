@@ -7,9 +7,7 @@ iwctl
 	station device scan
 	station device get-networks
 	station device connect SSID
-```
-### Network Manager
-```
+
 nmtui
 ```
 ### Mounting drives
@@ -21,10 +19,6 @@ UUID="{efi}" /boot vfat defaults 0 2
 UUID="" /run/media/{username}/{drivename} ntfs{type} defaults 0 0
 //{truenas}/{share} /run/media/Truenas cifs username={user},password={password},uid={user},gid={group} 0 0
 sudo mount //{truenas}/{share} /run/media/{share} -o username={user},uid={user},gid={group}
-```
-### Bluetooth
-```
-bluetoothctl
 ```
 ### Printers
 ```
