@@ -147,26 +147,26 @@ rice() {
 	options+=("maim" "screenshots" on)
 	options+=("mediainfo" "showing media info" on)
 	options+=("youtube-dl" "downloading youtube videos" on)
-	options+=("keepassxc" "password manager" off)
+	options+=("keepassxc" "password manager" on)
+	options+=("nextcloud-client" "nextcloud client" on)
+	options+=("liferea" "rss reader" on)
+	options+=("zathura" "document viewer" on)
+	options+=("zathura-mupdf" "allows zathura to view epub,pdf,xps" on)
+	options+=("zathura-cb" "allows zathura to view comics" on)
+	options+=("texlive-most" "LaTeX for creating documents" on)
+	options+=("biber" "create bibliographies in LaTeX" on)
+	options+=("qbittorrent" "torrent client" on)
+	options+=("cups" "printers" on)
+	options+=("ghostscript" "required for my printer" on)
+	options+=("thunderbird" "email client" on)
+	options+=("networkmanager-openvpn" "configuring openvpn" on)
+	options+=("network-manager-applet" "configuring openvpn" on)
 	options+=("code" "microsoft code" off)
 	options+=("steam" "videogames client" off)
 	options+=("discord" "discord client" off)
-	options+=("qbittorrent" "torrent client" off)
 	options+=("calibre" "book reader" off)
-	options+=("thunderbird" "email client" off)
-	options+=("nextcloud-client" "nextcloud client" off)
-	options+=("networkmanager-openvpn" "configuring openvpn" off)
-	options+=("network-manager-applet" "configuring openvpn" off)
 	options+=("liquidctl" "kraken cpu cooler control" off)
-	options+=("cups" "printer" off)
-	options+=("ghostscript" "printer" off)
 	options+=("mcomix" "manga reader" off)
-	options+=("liferea" "rss reader" off)
-	options+=("zathura" "document viewer" off)
-	options+=("zathura-mupdf" "allows zathura to view epub,pdf,xps" off)
-	options+=("zathura-cb" "allows zathura to view comics" off)
-	options+=("texlive-most" "LaTeX for creating documents" off)
-	options+=("biber" "create bibliographies in LaTeX" off)
 
 	optionsA=()
 	optionsA+=("zsh-fast-syntax-highlighting" "shell syntax highlighting" on)
@@ -178,7 +178,7 @@ rice() {
 	optionsA+=("devour" "cl application swallowing" on)
 	optionsA+=("hakuneko-desktop" "manga downloader" off)
 	optionsA+=("freefilesync-bin" "syncing client" off)
-	optionsA+=("epson-inkjet-printer-escpr" "printer driver" off)
+	optionsA+=("epson-inkjet-printer-escpr" "my printer driver" off)
 
 	optionsG=()
 	optionsG+=("dwmblocks" "status bar" on)
@@ -240,7 +240,7 @@ rice() {
 	sudo systemctl enable bluetooth
 }
 
-sudo pacman --noconfirm --needed -Sy dialog libnewt
+sudo pacman --noconfirm --needed -Sy dialog
 dialog --stdout --title "Welcome" --msgbox "Welcome to Holden's arch install and rice script!" 0 0
 clear
 
