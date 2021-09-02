@@ -140,7 +140,7 @@ rice() {
 	options+=("neofetch" "display system info" on)
 	options+=("mpv" "media player" on)
 	options+=("sxiv" "image viewer" on)
-	options+=("pcmanfm" "gui file manager" on)
+	options+=("pcmanfm-gtk3" "gui file manager" on)
 	options+=("gvfs" "allows pcmanfm to show other drives" on)
 	options+=("arc-gtk-theme" "GTK theme" on)
 	options+=("breeze-icons" "GTK icons theme" on)
@@ -241,7 +241,7 @@ rice() {
 }
 
 sudo pacman --noconfirm --needed -Sy dialog
-dialog --stdout --title "Welcome" --msgbox "Welcome to Holden's arch install and rice script!" 0 0
+dialog --stdout --title "Welcome" --msgbox "Welcome to HARIS Holden's arch installscript!" 0 0
 clear
 
 i=$(dialog --stdout --menu "Choose one" 0 0 0 1 "Install base arch system" 2 "Rice your arch system") || exit 1
