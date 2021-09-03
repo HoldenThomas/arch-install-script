@@ -163,6 +163,7 @@ rice() {
 	options+=("thunderbird" "email client" on)
 	options+=("networkmanager-openvpn" "configuring openvpn" on)
 	options+=("network-manager-applet" "configuring openvpn" on)
+	options+=("imwheel" "changing mouse scroll speed" on)
 	options+=("code" "microsoft code" off)
 	options+=("steam" "videogames client" off)
 	options+=("discord" "discord client" off)
