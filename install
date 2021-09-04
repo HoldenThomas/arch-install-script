@@ -54,7 +54,7 @@ baseArch() {
 	[ $nvidia -eq 0 ] && pacstrap /mnt nvidia nvidia-settings
 	[ $cpu -eq 1 ] && pacstrap /mnt intel-ucode || pacstrap /mnt amd-ucode
 
-	genfstab -U /mnt >> /etc/fstab
+	genfstab -U /mnt >> /mnt/etc/fstab
 	arch-chroot /mnt ln -sf /usr/share/zoneinfo/America/New_York /etc/localtime
 	arch-chroot /mnt hwclock --systohc
 	sed -i "177 s/^##*//" /mnt/etc/locale.gen
@@ -164,6 +164,7 @@ rice() {
 	options+=("networkmanager-openvpn" "configuring openvpn" on)
 	options+=("network-manager-applet" "configuring openvpn" on)
 	options+=("imwheel" "changing mouse scroll speed" on)
+	options+=("gajim" "XMPP client" on)
 	options+=("code" "microsoft code" off)
 	options+=("steam" "videogames client" off)
 	options+=("discord" "discord client" off)
@@ -179,6 +180,7 @@ rice() {
 	optionsA+=("brave-bin" "internet browser" on)
 	optionsA+=("vidir" "cl bulkrename utility" on)
 	optionsA+=("devour" "cl application swallowing" on)
+	optionsA+=("gajim-plugin-omemo" "gajim omemo pluging" on)
 	optionsA+=("hakuneko-desktop" "manga downloader" off)
 	optionsA+=("freefilesync-bin" "syncing client" off)
 	optionsA+=("epson-inkjet-printer-escpr" "my printer driver" off)
