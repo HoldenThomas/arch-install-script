@@ -83,7 +83,7 @@ baseArch() {
 
 	dialog --stdout --yesno "Reboot now" 0 0
 	reboot=$?
-	[ $reboot -eq 0 ] && reboot
+	[ $reboot -eq 0 ] && reboot || exit 1
 }
 
 rice() {
