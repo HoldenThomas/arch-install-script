@@ -98,9 +98,8 @@ rice() {
 
 	mkdir .dotfiles
 	git clone --bare git://git.holdenthomas.xyz/dotfiles ~/.dotfiles
-	alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-	config checkout
-	config config status.showUntrackedFiles no
+	git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME checkout
+	git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME config status.showUntrackedFiles no
 
 	options=()
 	options+=("xorg-server" "graphical server" on)
@@ -181,6 +180,7 @@ rice() {
 	optionsA+=("devour" "cl application swallowing" on)
 	optionsA+=("simple-mtpfs" "accessing android devices" on)
 	optionsA+=("gajim-plugin-omemo" "gajim omemo pluging" on)
+	optionsA+=("python-keepmenu-git" "Keepass dmenu script" on)
 	optionsA+=("hakuneko-desktop" "manga downloader" off)
 	optionsA+=("freefilesync-bin" "syncing client" off)
 	optionsA+=("epson-inkjet-printer-escpr" "my printer driver" off)
