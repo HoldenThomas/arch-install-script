@@ -149,20 +149,20 @@ rice() {
 	options+=("nextcloud-client" "nextcloud client" on)
 	options+=("gnome-keyring" "for storing application passwords" on)
 	options+=("seahorse" "for editing gnome-keyrings" on)
-	options+=("liferea" "rss reader" on)
 	options+=("zathura" "document viewer" on)
 	options+=("zathura-pdf-mupdf" "allows zathura to view epub,pdf,xps" on)
-	options+=("zathura-cb" "allows zathura to view comics" on)
-	options+=("texlive-most" "LaTeX for creating documents" on)
-	options+=("biber" "create bibliographies in LaTeX" on)
-	options+=("qbittorrent" "torrent client" on)
-	options+=("cups" "printers" on)
-	options+=("ghostscript" "required for my printer" on)
-	options+=("thunderbird" "email client" on)
-	options+=("networkmanager-openvpn" "configuring openvpn" on)
-	options+=("network-manager-applet" "configuring openvpn" on)
 	options+=("imwheel" "changing mouse scroll speed" on)
-	options+=("gajim" "XMPP client" on)
+	options+=("zathura-cb" "allows zathura to view comics" off)
+	options+=("thunderbird" "email client" off)
+	options+=("liferea" "rss reader" off)
+	options+=("qbittorrent" "torrent client" off)
+	options+=("networkmanager-openvpn" "configuring openvpn" off)
+	options+=("network-manager-applet" "configuring openvpn" off)
+	options+=("cups" "printers" off)
+	options+=("ghostscript" "required for my printer" off)
+	options+=("texlive-most" "LaTeX for creating documents" off)
+	options+=("biber" "create bibliographies in LaTeX" off)
+	options+=("gajim" "XMPP client" off)
 	options+=("code" "microsoft code" off)
 	options+=("steam" "videogames client" off)
 	options+=("discord" "discord client" off)
@@ -179,8 +179,8 @@ rice() {
 	optionsA+=("vidir" "cl bulkrename utility" on)
 	optionsA+=("devour" "cl application swallowing" on)
 	optionsA+=("simple-mtpfs" "accessing android devices" on)
-	optionsA+=("gajim-plugin-omemo" "gajim omemo pluging" on)
 	optionsA+=("python-keepmenu-git" "Keepass dmenu script" on)
+	optionsA+=("gajim-plugin-omemo" "gajim omemo pluging" off)
 	optionsA+=("hakuneko-desktop" "manga downloader" off)
 	optionsA+=("freefilesync-bin" "syncing client" off)
 	optionsA+=("epson-inkjet-printer-escpr" "my printer driver" off)
@@ -235,14 +235,13 @@ rice() {
 
 	for itm in $sel; do
 	  case $itm in
+	    '"zsh"') chsh -s /usr/bin/zsh && mkdir -p ~/.cache/zsh;;
+	    '"bluez"') sudo systemctl enable bluetooth;;
 	    '"cups"') sudo systemctl enable cups;;
 	  esac
 	done
 
 	yes | yay -S libxft-bgra
-	chsh -s /usr/bin/zsh
-	mkdir -p ~/.cache/zsh
-	sudo systemctl enable bluetooth
 }
 
 sudo pacman --noconfirm --needed -Sy dialog
