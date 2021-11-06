@@ -126,7 +126,6 @@ rice() {
 	options+=("ntfs-3g" "accessing ntfs-partitions" on)
 	options+=("cifs-utils" "accessing smba shares" on)
 	options+=("p7zip" "extracting & archiving" on)
-	options+=("slock" "screen locking" on)
 	options+=("openssh" "ssh" on)
 	options+=("rsync" "syncing" on)
 	options+=("zsh" "shell" on)
@@ -185,7 +184,8 @@ rice() {
 	optionsG+=("dwmblocks" "status bar" on)
 	optionsG+=("dmenu" "menu and command runner" on)
 	optionsG+=("st" "suckless's terminal by Luke Smith" on)
-	optionsG+=("dwm" "mysuckless's window manager build" on)
+	optionsG+=("dwm" "my suckless's window manager build" on)
+	optionsG+=("slock" "my suckless's window locker build" on)
 
 	sel=$(whiptail --backtitle "$apptitle" --title "Pacman Applications :" --checklist "Choose what you want" --cancel-button "Back" 0 0 0 \
 	  "${options[@]}" \
