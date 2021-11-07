@@ -174,7 +174,7 @@ rice() {
 	optionsA+=("vidir" "cl bulkrename utility" on)
 	optionsA+=("devour" "cl application swallowing" on)
 	optionsA+=("simple-mtpfs" "accessing android devices" on)
-	optionsA+=("python-keepmenu-git" "Keepass dmenu script" on)
+	optionsA+=("keepmenu-git" "Keepass dmenu script" on)
 	optionsA+=("gajim-plugin-omemo" "gajim omemo pluging" off)
 	optionsA+=("hakuneko-desktop" "manga downloader" off)
 	optionsA+=("freefilesync-bin" "syncing client" off)
