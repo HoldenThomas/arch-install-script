@@ -237,7 +237,7 @@ rice() {
 	  esac
 	done
 
-	yes | yay -S libxft-bgra
+	yes | yay -S libxft-bgra-git
 }
 
 sudo pacman --noconfirm --needed -Sy dialog
