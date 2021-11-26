@@ -150,6 +150,7 @@ rice() {
 	options+=("imwheel" "changing mouse scroll speed" on)
 	options+=("zathura" "document viewer" on)
 	options+=("zathura-pdf-mupdf" "allows zathura to view epub,pdf,xps" on)
+	options+=("stalonetray" "systray application" on)
 	options+=("zathura-cb" "allows zathura to view comics" off)
 	options+=("thunderbird" "email client" off)
 	options+=("liferea" "rss reader" off)
