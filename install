@@ -154,6 +154,8 @@ rice() {
 	options+=("nodejs-lts-erbium" "Nodejs 12.X for nvim coc" on)
 	options+=("npm" "Nodejs packaged modules for nvim coc" on)
 	options+=("python-pynvim" "Python neovim module for nvim coc" on)
+	options+=("ccls" "C language server for nvim coc" on)
+	options+=("redshift" "changes color temp according to time" on)
 	options+=("zathura-cb" "allows zathura to view comics" off)
 	options+=("thunderbird" "email client" off)
 	options+=("liferea" "rss reader" off)
