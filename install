@@ -61,7 +61,6 @@ baseArch() {
 	arch-chroot /mnt locale-gen
 	echo LANG=en_US.UTF-8 >> /mnt/etc/locale.conf
 	echo $hostname >> /mnt/etc/hostname
-	echo -e "127.0.0.1\tlocalhost\n::1\t\tlocalhost\n127.0.1.1\t${hostname}.localdomain\t${hostname}" >> /mnt/etc/hosts
 	arch-chroot /mnt systemctl enable NetworkManager
 
 	[ $grubRemovable -eq 0 ] && arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=boot --removable || arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=boot --bootloader-id=GRUB
@@ -233,7 +232,7 @@ rice() {
 	sudo pacman --noconfirm --needed -S $pkg
 	yay -S --noconfirm $pkgA
 	for item in $pkgG; do
-		git clone git://git.holdenthomas.xyz/$item ~/.local/src/$item && ~/.local/src/$item && sudo make clean install && cd
+		git clone git://git.holdenthomas.xyz/$item ~/.local/src/$item && cd ~/.local/src/$item && sudo make clean install && cd
 	done
 
 	for itm in $sel; do
