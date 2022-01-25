@@ -132,6 +132,8 @@ rice() {
 	options+=("fzf" "fuzzy finder" on)
 	options+=("bc" "cl calulator" on)
 	options+=("htop" "system monitor" on)
+	options+=("bashtop" "system monitor" on)
+	options+=("python-psutil" "required for bashtop" on)
 	options+=("neofetch" "display system info" on)
 	options+=("mpv" "media player" on)
 	options+=("sxiv" "image viewer" on)
