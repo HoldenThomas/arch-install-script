@@ -130,6 +130,7 @@ customize() {
 	options+=("redshift" "changes color temp according to time" on)
 	options+=("tmux" "terminal multiplexer" on)
 	options+=("figlet" "create bubble letters in terminal" on)
+	options+=("sxhkd" "hot key deamon" on)
 	options+=("zathura-cb" "allows zathura to view comics" off)
 	options+=("thunderbird" "email client" off)
 	options+=("liferea" "rss reader" off)
