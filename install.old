@@ -1,15 +1,40 @@
 #!/bin/sh
 
 baseArch() {
-  echo "Enter hostname" && read hostname
-  echo "Enter username" && read user
-  echo "Enter password" && read password
-	devicelist=$(lsblk -dplnx size -o name,size | grep -Ev "boot|rpmb|loop" | tac)
-  echo "${devicelist}\nEnter install disk(/dev/sd?" && read device
-  echo "Grub removable(y,n)" && read grubRemovable
-  echo "Video drivers\n1.\tVirtualbox\n2.\tNvidia\n3.\tAMD\n4.\tIntel\n" && read videoDriver
-  echo "CPU microcode\n1.\tIntel\n2.\tAMD" && read cpu
-  echo "Swap(y,n)" && read swap
+	hostname=$(dialog --stdout --inputbox "Enter hostname" 0 0) || exit 1
+	clear
+	: ${hostname:?"hostname cannot be empty"} || exit 1
+
+	user=$(dialog --stdout --inputbox "Enter admin username" 0 0) || exit 1
+	clear
+	: ${user:?"user cannot be empty"}
+
+	password=$(dialog --stdout --passwordbox "Enter admin password" 0 0) || exit 1
+	clear
+	: ${password:?"password cannot be empty"}
+	password2=$(dialog --stdout --passwordbox "Enter admin password again" 0 0) || exit 1
+	clear
+	[ "$password" != "$password2" ] && echo "Passwords did not match" && exit 1
+
+	devicelist=$(lsblk -dplnx size -o name,size | grep -Ev "boot|rpmb|loop" | tac) || exit 1
+	device=$(dialog --stdout --menu "Select installation disk" 0 0 0 ${devicelist})
+	clear
+
+	dialog --stdout --yesno "Grub removable installation" 0 0
+	grubRemovable=$?
+	clear
+
+	dialog --stdout --yesno "Is this a virtualbox installation" 0 0
+	virtualBox=$?
+	clear
+
+	dialog --stdout --yesno "Install nvidia drivers" 0 0
+	nvidia=$?
+	clear
+
+	cpu=$(dialog --stdout --menu "Choose CPU" 0 0 0 1 "Intel" 2 "AMD") || exit 1
+	clear
+
 
 	timedatectl set-ntp true
 
@@ -26,12 +51,8 @@ baseArch() {
 	mount $partBoot /mnt/boot
 
 	pacstrap /mnt base base-devel linux linux-firmware man-db man-pages texinfo networkmanager neovim git grub efibootmgr
-  [ $videoDriver -eq 1 ] && pacstrap /mnt virtualbox-guest-utils
-  [ $videoDriver -eq 2 ] && pacstrap /mnt nvidia nvidia-settings
-  [ $videoDriver -eq 3 ] && pacstrap /mnt xf86-video-amdgpu
-  [ $videoDriver -eq 4 ] && pacstrap /mnt xf86-video-intel
-	[ $cpu -eq 1 ] && pacstrap /mnt intel-ucode
-  [ $cpu -eq 2 ] &&  pacstrap /mnt amd-ucode
+	[ $nvidia -eq 0 ] && pacstrap /mnt nvidia nvidia-settings
+	[ $cpu -eq 1 ] && pacstrap /mnt intel-ucode || pacstrap /mnt amd-ucode
 
 	genfstab -U /mnt >> /mnt/etc/fstab
 	arch-chroot /mnt ln -sf /usr/share/zoneinfo/America/New_York /etc/localtime
@@ -42,11 +63,10 @@ baseArch() {
 	echo $hostname >> /mnt/etc/hostname
 	arch-chroot /mnt systemctl enable NetworkManager
 
-	[ $grubRemovable = "y" ] && arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=boot --removable || arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=boot --bootloader-id=GRUB
-	sed -i "s/GRUB_TIMEOUT=5/GRUB_TIMEOUT=1/" /mnt/etc/default/grub
+	[ $grubRemovable -eq 0 ] && arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=boot --removable || arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=boot --bootloader-id=GRUB
 	arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 
-	[ $virtualBox -eq 0 ] && arch-chroot /mnt systemctl enable vboxservice
+	[ $virtualBox -eq 0 ] && pacstrap /mnt virtualbox-guest-utils && arch-chroot /mnt systemctl enable vboxservice
 
 	arch-chroot /mnt useradd -m -G wheel,audio,disk,input,kvm,optical,scanner,storage,video $user
 	sed -i "82 s/^##*//;s|# %wheel ALL=(ALL) NOPASSWD: ALL|%wheel ALL=(ALL) NOPASSWD: /usr/bin/mount,/usr/bin/umount,/usr/bin/pacman,/usr/bin/systemctl,/usr/bin/make,/usr/bin/nvim|" /mnt/etc/sudoers
@@ -54,15 +74,24 @@ baseArch() {
 	echo -e "${password}\n${password}" | arch-chroot /mnt passwd $user
 
 	sed -i "33 s/^##*//;93,94 s/^##*//;37i ILoveCandy" /mnt/etc/pacman.conf
-	arch-chroot /mnt pacman -Sy
+	arch-chroot /mnt pacman -Syu
+	sed -i "s/GRUB_TIMEOUT=5/GRUB_TIMEOUT=1/" /mnt/etc/default/grub
+	arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
 
+	cp install /mnt/home/"$user"
 
-  echo "-----------Base Install Finished-----------"
+	dialog --stdout --yesno "Reboot now" 0 0
+	reboot=$?
+	[ $reboot -eq 0 ] && reboot || exit 1
 }
 
-customize() {
-  echo "Dualbooting windows(y,n)" && read timeFix
-	[ $timeFix = "y" ] && sudo timedatectl set-local-rtc true --adjust-system-clock
+rice() {
+	dialog --stdout --yesno "If dualbooting windows, fix time" 0 0
+	timeFix=$?
+	clear
+
+	[ $timeFix -eq 0 ] && sudo timedatectl set-local-rtc true --adjust-system-clock
+	clear
 
 	git clone https://aur.archlinux.org/yay.git; cd yay; makepkg --noconfirm -si; cd; rm -rf yay
 
@@ -144,17 +173,6 @@ customize() {
 	options+=("mcomix" "manga reader" off)
 	options+=("cups" "printers" off)
 	options+=("ghostscript" "required for my printer" off)
-	sel=$(whiptail --backtitle "$apptitle" --title "Pacman Applications :" --checklist "Choose what you want" --cancel-button "Back" 0 0 0 \
-	  "${options[@]}" \
-	  3>&1 1>&2 2>&3)
-	if [ ! "$?" = "0" ]; then
-	  exit 1
-	fi
-	for itm in $sel; do
-	  case $itm in
-	    *) pkg="$pkg $(echo $itm | sed 's/"//g')";;
-	  esac
-	done
 
 	optionsA=()
 	optionsA+=("zsh-fast-syntax-highlighting" "shell syntax highlighting" on)
@@ -170,6 +188,26 @@ customize() {
 	optionsA+=("hakuneko-desktop" "manga downloader" off)
 	optionsA+=("freefilesync-bin" "syncing client" off)
 	optionsA+=("epson-inkjet-printer-escpr" "my printer driver" off)
+
+	optionsG=()
+	optionsG+=("dwmblocks" "status bar" on)
+	optionsG+=("dmenu" "menu and command runner" on)
+	optionsG+=("st" "suckless's terminal by Luke Smith" on)
+	optionsG+=("dwm" "my suckless's window manager build" on)
+	optionsG+=("slock" "my suckless's window locker build" on)
+
+	sel=$(whiptail --backtitle "$apptitle" --title "Pacman Applications :" --checklist "Choose what you want" --cancel-button "Back" 0 0 0 \
+	  "${options[@]}" \
+	  3>&1 1>&2 2>&3)
+	if [ ! "$?" = "0" ]; then
+	  exit 1
+	fi
+	for itm in $sel; do
+	  case $itm in
+	    *) pkg="$pkg $(echo $itm | sed 's/"//g')";;
+	  esac
+	done
+
 	selA=$(whiptail --backtitle "$apptitle" --title "AUR Applications :" --checklist "Choose what you want" --cancel-button "Back" 0 0 0 \
 	  "${optionsA[@]}" \
 	  3>&1 1>&2 2>&3)
@@ -182,12 +220,6 @@ customize() {
 	  esac
 	done
 
-	optionsG=()
-	optionsG+=("dwmblocks" "status bar" on)
-	optionsG+=("dmenu" "menu and command runner" on)
-	optionsG+=("st" "suckless's terminal by Luke Smith" on)
-	optionsG+=("dwm" "my suckless's window manager build" on)
-	optionsG+=("slock" "my suckless's window locker build" on)
 	selG=$(whiptail --backtitle "$apptitle" --title "Git Applications :" --checklist "Choose what you want" --cancel-button "Back" 0 0 0 \
 	  "${optionsG[@]}" \
 	  3>&1 1>&2 2>&3)
@@ -205,7 +237,6 @@ customize() {
 	for item in $pkgG; do
 		git clone git://git.holdenthomas.xyz/$item ~/.local/src/$item && cd ~/.local/src/$item && sudo make clean install && cd
 	done
-	yes | yay -S libxft-bgra-git
 
 	for itm in $sel; do
 	  case $itm in
@@ -215,9 +246,13 @@ customize() {
 	  esac
 	done
 
-echo "-----------Costomization Finished - Eject Install Media and Reboot-----------"
+	yes | yay -S libxft-bgra-git
 }
 
-echo "-----------Welcome to my Arch installscript-----------"
-baseArch
-arch-chroot /mnt customize
+sudo pacman --noconfirm --needed -Sy dialog
+dialog --stdout --title "Welcome" --msgbox "Welcome to HARIS Holden's arch installscript!" 0 0
+clear
+
+i=$(dialog --stdout --menu "Choose one" 0 0 0 1 "Install base arch system" 2 "Rice your arch system") || exit 1
+clear
+[ $i -eq 1 ] && baseArch || rice
