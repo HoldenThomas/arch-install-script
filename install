@@ -5,11 +5,10 @@ baseArch() {
   echo "Enter username" && read user
   echo "Enter password" && read password
 	devicelist=$(lsblk -dplnx size -o name,size | grep -Ev "boot|rpmb|loop" | tac)
-  echo "${devicelist}\nEnter install disk(/dev/sd?" && read device
+  echo -e "${devicelist}\nEnter install disk(/dev/sd?" && read device
   echo "Grub removable(y,n)" && read grubRemovable
-  echo "Video drivers\n1.\tVirtualbox\n2.\tNvidia\n3.\tAMD\n4.\tIntel\n" && read videoDriver
-  echo "CPU microcode\n1.\tIntel\n2.\tAMD" && read cpu
-  echo "Swap(y,n)" && read swap
+  echo -e "Video drivers\n1.\tVirtualbox\n2.\tNvidia\n3.\tAMD\n4.\tIntel\n" && read videoDriver
+  echo -e "CPU microcode\n1.\tIntel\n2.\tAMD" && read cpu
 
 	timedatectl set-ntp true
 
@@ -56,6 +55,7 @@ baseArch() {
 	sed -i "33 s/^##*//;93,94 s/^##*//;37i ILoveCandy" /mnt/etc/pacman.conf
 	arch-chroot /mnt pacman -Sy
 
+  cp install /mnt/home/"$user"
 
   echo "-----------Base Install Finished-----------"
 }
@@ -219,5 +219,6 @@ echo "-----------Costomization Finished - Eject Install Media and Reboot--------
 }
 
 echo "-----------Welcome to my Arch installscript-----------"
-baseArch
-arch-chroot /mnt customize
+echo -e "1.\tBase install\n2.\tCustomize" && read i
+[ $i -eq 1 ] && baseArch
+[ $i -eq 2 ] && customize
