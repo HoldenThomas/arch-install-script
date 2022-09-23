@@ -210,7 +210,6 @@ customize() {
 	for item in $pkgG; do
 		git clone git://git.holdenthomas.xyz/$item ~/.local/src/$item && cd ~/.local/src/$item && sudo make clean install && cd
 	done
-	yes | yay -S libxft-bgra-git
 
 	for itm in $sel; do
 	  case $itm in
