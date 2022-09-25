@@ -99,6 +99,7 @@ customize() {
 	options+=("openssh" "ssh" on)
 	options+=("rsync" "syncing" on)
 	options+=("zsh" "shell" on)
+	options+=("starship" "shell prompt" on)
 	options+=("dash" "faster /bin/sh" on)
 	options+=("fzf" "fuzzy finder" on)
 	options+=("bc" "cl calulator" on)
