@@ -48,7 +48,7 @@ baseArch() {
 	[ $virtualBox -eq 0 ] && arch-chroot /mnt systemctl enable vboxservice
 
 	arch-chroot /mnt useradd -m -G wheel,audio,disk,input,kvm,optical,scanner,storage,video $user
-	sed -i "82 s/^##*//;s|# %wheel ALL=(ALL) NOPASSWD: ALL|%wheel ALL=(ALL) NOPASSWD: /usr/bin/mount,/usr/bin/umount,/usr/bin/pacman,/usr/bin/systemctl,/usr/bin/make,/usr/bin/nvim|" /mnt/etc/sudoers
+	sed -i "82 s/^##*//;s|# %wheel ALL=(ALL) NOPASSWD: ALL|%wheel ALL=(ALL) NOPASSWD: /usr/bin/mount,/usr/bin/umount,/usr/bin/pacman,/usr/bin/make,/usr/bin/nvim|" /mnt/etc/sudoers
 	echo -e "${password}\n${password}" | arch-chroot /mnt passwd
 	echo -e "${password}\n${password}" | arch-chroot /mnt passwd $user
 
@@ -127,8 +127,6 @@ customize() {
 	options+=("imwheel" "changing mouse scroll speed" on)
 	options+=("zathura" "document viewer" on)
 	options+=("zathura-pdf-mupdf" "allows zathura to view epub,pdf,xps" on)
-	options+=("stalonetray" "systray application" on)
-	options+=("nodejs-lts-erbium" "Nodejs 12.X for nvim coc" on)
 	options+=("npm" "Nodejs packaged modules for nvim coc" on)
 	options+=("python-pynvim" "Python neovim module for nvim coc" on)
 	options+=("ccls" "C language server for nvim coc" on)
@@ -142,7 +140,6 @@ customize() {
 	options+=("qbittorrent" "torrent client" off)
 	options+=("networkmanager-openvpn" "configuring openvpn" off)
 	options+=("network-manager-applet" "configuring openvpn" off)
-	options+=("gajim" "XMPP client" off)
 	options+=("code" "microsoft code" off)
 	options+=("steam" "videogames client" off)
 	options+=("discord" "discord client" off)
@@ -170,9 +167,7 @@ customize() {
 	optionsA+=("brave-bin" "internet browser" on)
 	optionsA+=("vidir" "cl bulkrename utility" on)
 	optionsA+=("devour" "cl application swallowing" on)
-	optionsA+=("simple-mtpfs" "accessing android devices" on)
-	optionsA+=("keepmenu-git" "Keepass dmenu script" on)
-	optionsA+=("gajim-plugin-omemo" "gajim omemo pluging" off)
+	optionsA+=("android-file-transfer" "accessing android devices" on)
 	optionsA+=("hakuneko-desktop" "manga downloader" off)
 	optionsA+=("freefilesync-bin" "syncing client" off)
 	optionsA+=("epson-inkjet-printer-escpr" "my printer driver" off)
@@ -189,11 +184,11 @@ customize() {
 	done
 
 	optionsG=()
-	optionsG+=("dwmblocks" "status bar" on)
-	optionsG+=("dmenu" "menu and command runner" on)
-	optionsG+=("st" "suckless's terminal by Luke Smith" on)
-	optionsG+=("dwm" "my suckless's window manager build" on)
-	optionsG+=("slock" "my suckless's window locker build" on)
+	optionsG+=("dwmblocks" "dmw status bar" on)
+	optionsG+=("dmenu" "my build of dmenu" on)
+	optionsG+=("st" "my build of st" on)
+	optionsG+=("dwm" "my build of dwm" on)
+	optionsG+=("slock" "my build of slock" on)
 	selG=$(whiptail --backtitle "$apptitle" --title "Git Applications :" --checklist "Choose what you want" --cancel-button "Back" 0 0 0 \
 	  "${optionsG[@]}" \
 	  3>&1 1>&2 2>&3)
