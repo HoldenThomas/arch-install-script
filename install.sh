@@ -12,7 +12,7 @@ baseArch() {
 
 	timedatectl set-ntp true
 
-	echo -e "g\n  n\n\n\n+260M\nt\n1\n  n\n\n\n+2G\nt\n\n19\n  n\n\n\n\n  w\n" | fdisk $device
+	echo -e "g\n  n\n\n\n+1G\nt\n1\n  n\n\n\n+2G\nt\n\n19\n  n\n\n\n\n  w\n" | fdisk $device
 	partBoot="${device}1"
 	partSwap="${device}2"
 	partLinux="${device}3"
@@ -61,13 +61,10 @@ baseArch() {
 }
 
 customize() {
-  echo "Dualbooting windows(y,n)" && read timeFix
-	[ $timeFix = "y" ] && sudo timedatectl set-local-rtc true --adjust-system-clock
-
 	git clone https://aur.archlinux.org/yay.git; cd yay; makepkg --noconfirm -si; cd; rm -rf yay
 
 	mkdir .dotfiles
-	git clone --bare git://git.holdenthomas.xyz/dotfiles ~/.dotfiles
+	git clone --bare https://github.com/holdenthomas/dotfiles ~/.dotfiles
 	git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME checkout
 	git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME config status.showUntrackedFiles no
 
@@ -204,7 +201,7 @@ customize() {
 	sudo pacman --noconfirm --needed -S $pkg
 	yay -S --noconfirm $pkgA
 	for item in $pkgG; do
-		git clone git://git.holdenthomas.xyz/$item ~/.local/src/$item && cd ~/.local/src/$item && sudo make clean install && cd
+		git clone https://github.com/holdenthomas/$item ~/.local/src/$item && cd ~/.local/src/$item && sudo make clean install && cd
 	done
 
 	for itm in $sel; do
