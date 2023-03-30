@@ -145,7 +145,7 @@ customize() {
 	options+=("gvfs" "allows pcmanfm to show other drives" on)
 	options+=("keepassxc" "password manager" on)
 	options+=("nextcloud-client" "nextcloud client" on)
-	options+=("thunderbird" "email client" on)
+	options+=("thunderbird" "email client" off)
 	options+=("liferea" "rss reader" off)
 	options+=("qbittorrent" "torrent client" off)
 	options+=("code" "ms code" off)
