@@ -10,8 +10,6 @@ baseArch() {
   echo -e "Video drivers\n1.\tVirtualbox\n2.\tNvidia\n3.\tAMD\n4.\tIntel\n" && read videoDriver
   echo -e "CPU microcode\n1.\tIntel\n2.\tAMD" && read cpu
 
-	timedatectl set-ntp true
-
 	echo -e "g\n  n\n\n\n+1G\nt\n1\n  n\n\n\n+2G\nt\n\n19\n  n\n\n\n\n  w\n" | fdisk $device
 	partBoot="${device}1"
 	partSwap="${device}2"
@@ -39,13 +37,13 @@ baseArch() {
 	arch-chroot /mnt locale-gen
 	echo LANG=en_US.UTF-8 >> /mnt/etc/locale.conf
 	echo $hostname >> /mnt/etc/hostname
+
 	arch-chroot /mnt systemctl enable NetworkManager
+	[ $virtualBox -eq 0 ] && arch-chroot /mnt systemctl enable vboxservice
 
 	[ $grubRemovable = "y" ] && arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=boot --removable || arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=boot --bootloader-id=GRUB
 	sed -i "s/GRUB_TIMEOUT=5/GRUB_TIMEOUT=1/" /mnt/etc/default/grub
 	arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
-
-	[ $virtualBox -eq 0 ] && arch-chroot /mnt systemctl enable vboxservice
 
 	arch-chroot /mnt useradd -m -G wheel,audio,disk,input,kvm,optical,scanner,storage,video $user
 	sed -i "82 s/^##*//;s|# %wheel ALL=(ALL) NOPASSWD: ALL|%wheel ALL=(ALL) NOPASSWD: /usr/bin/mount,/usr/bin/umount,/usr/bin/pacman,/usr/bin/make,/usr/bin/nvim|" /mnt/etc/sudoers
@@ -57,7 +55,7 @@ baseArch() {
 
   cp install /mnt/home/"$user"
 
-  echo "-----------Base Install Finished-----------"
+  echo "-----------Finished-----------"
 }
 
 customize() {
@@ -68,82 +66,140 @@ customize() {
 	git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME checkout
 	git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME config status.showUntrackedFiles no
 
+
+
 	options=()
+	optionsA=()
+	optionsG=()
+
+  # Graphics
 	options+=("xorg-server" "graphical server" on)
 	options+=("xorg-xinit" "starting graphical server" on)
-	options+=("xwallpaper" "setting wallpaper" on)
-	options+=("xclip" "c&p from cl" on)
-	options+=("xcape" "remapping escape/super" on)
 	options+=("arandr" "change monitor arragement" on)
 	options+=("brightnessctl" "control screen brightness" on)
+	options+=("xwallpaper" "setting wallpaper" on)
+	options+=("picom" "compositor" on)
+
+  # Audio
 	options+=("pulseaudio-alsa" "audio system" on)
 	options+=("pulsemixer" "audio controller" on)
 	options+=("pamixer" "cl audio interface" on)
 	options+=("alsa-utils" "audio system utils" on)
+
+  # Bluetooth
 	options+=("pulseaudio-bluetooth" "bluetooth" on)
 	options+=("bluez" "bluetooth" on)
 	options+=("bluez-utils" "bluetooth" on)
+
+  # Fonts
 	options+=("noto-fonts-cjk" "asian fonts" on)
 	options+=("ttf-font-awesome" "emojis" on)
 	options+=("ttf-joypixels" "emojis" on)
+
+  # Themes
+	options+=("arc-gtk-theme" "GTK theme" on)
+	options+=("breeze-icons" "GTK icons theme" on)
+
+  # Notifications
 	options+=("dunst" "notification system" on)
 	options+=("libnotify" "desktop notifications" on)
-	options+=("picom" "transparency" on)
-	options+=("reflector" "updating pacman mirrors" on)
+
+  # File system utilities
 	options+=("ntfs-3g" "accessing ntfs-partitions" on)
 	options+=("cifs-utils" "accessing smba shares" on)
+	optionsA+=("android-file-transfer" "accessing android devices" on)
+
+  # Command line and shell
+	options+=("zsh" "shell" on)
+	optionsA+=("zsh-fast-syntax-highlighting" "shell syntax highlighting" on)
+	options+=("starship" "shell prompt" on)
+	options+=("dash" "faster /bin/sh" on)
+	optionsA+=("dashbinsh" "adds dash to /bin/sh" on)
+
+  # Other command line apps
+	options+=("xclip" "copy & past from command line" on)
+	options+=("xcape" "remapping keys" on)
+	options+=("reflector" "updating pacman mirrors" on)
 	options+=("p7zip" "extracting & archiving" on)
 	options+=("openssh" "ssh" on)
 	options+=("rsync" "syncing" on)
-	options+=("zsh" "shell" on)
-	options+=("starship" "shell prompt" on)
-	options+=("dash" "faster /bin/sh" on)
 	options+=("fzf" "fuzzy finder" on)
 	options+=("bc" "cl calulator" on)
+	options+=("neofetch" "display system info" on)
+	options+=("maim" "screenshots" on)
+	options+=("youtube-dl" "downloading youtube videos" on)
+	options+=("imwheel" "changing mouse scroll speed" on)
+	options+=("redshift" "changes color temp according to time" on)
+	options+=("tmux" "terminal multiplexer" on)
+	options+=("figlet" "create bubble letters in terminal" on)
+	options+=("sxhkd" "hot key deamon" on)
+	optionsA+=("vidir" "command line bulkrename utility" on)
+	optionsA+=("devour" "command line application swallowing" on)
+	options+=("liquidctl" "kraken cpu cooler control" off)
+
+  # Applications
+	optionsA+=("brave-bin" "browser" on)
+	options+=("mpv" "media player" on)
+	options+=("sxiv" "image viewer" on)
+	options+=("pcmanfm-gtk3" "file manager" on)
+	options+=("gvfs" "allows pcmanfm to show other drives" on)
+	options+=("keepassxc" "password manager" on)
+	options+=("nextcloud-client" "nextcloud client" on)
+	options+=("thunderbird" "email client" on)
+	options+=("liferea" "rss reader" off)
+	options+=("qbittorrent" "torrent client" off)
+	options+=("code" "ms code" off)
+	options+=("steam" "video games" off)
+	options+=("discord" "discord client" off)
+	options+=("mcomix" "manga reader" off)
+	optionsA+=("hakuneko-desktop" "manga downloader" off)
+	optionsA+=("freefilesync-bin" "syncing client" off)
+
+  # System Monitor
 	options+=("htop" "system monitor" on)
 	options+=("bashtop" "system monitor" on)
 	options+=("python-psutil" "required for bashtop" on)
-	options+=("neofetch" "display system info" on)
-	options+=("mpv" "media player" on)
-	options+=("sxiv" "image viewer" on)
-	options+=("pcmanfm-gtk3" "gui file manager" on)
-	options+=("gvfs" "allows pcmanfm to show other drives" on)
-	options+=("arc-gtk-theme" "GTK theme" on)
-	options+=("breeze-icons" "GTK icons theme" on)
-	options+=("maim" "screenshots" on)
+	optionsA+=("gotop" "system monitor" on)
+
+  # NetworkManager
+	options+=("networkmanager-openvpn" "configuring openvpn" off)
+	options+=("network-manager-applet" "configuring openvpn" off)
+
+  # Zathura document viewer
+	options+=("zathura" "document viewer" on)
+	options+=("zathura-pdf-mupdf" "allows zathura to view epub,pdf,xps" on)
+	options+=("zathura-cb" "allows zathura to view comics" on)
+
+  # Password Storage
+	options+=("gnome-keyring" "for storing application passwords" on)
+	options+=("seahorse" "for editing gnome-keyrings" on)
+
+  # lf file manager
+	optionsA+=("lf" "cl file manager" on)
 	options+=("ueberzug" "lf image previews" on)
 	options+=("mediainfo" "lf media info preview" on)
 	options+=("bat" "lf text preview" on)
 	options+=("lynx" "lf html preview" on)
 	options+=("atool" "lf zip preview" on)
-	options+=("youtube-dl" "downloading youtube videos" on)
-	options+=("keepassxc" "password manager" on)
-	options+=("nextcloud-client" "nextcloud client" on)
-	options+=("gnome-keyring" "for storing application passwords" on)
-	options+=("seahorse" "for editing gnome-keyrings" on)
-	options+=("imwheel" "changing mouse scroll speed" on)
-	options+=("zathura" "document viewer" on)
-	options+=("zathura-pdf-mupdf" "allows zathura to view epub,pdf,xps" on)
+
+  # Vim dependencies
 	options+=("npm" "Nodejs packaged modules for nvim coc" on)
 	options+=("python-pynvim" "Python neovim module for nvim coc" on)
 	options+=("ccls" "C language server for nvim coc" on)
-	options+=("redshift" "changes color temp according to time" on)
-	options+=("tmux" "terminal multiplexer" on)
-	options+=("figlet" "create bubble letters in terminal" on)
-	options+=("sxhkd" "hot key deamon" on)
-	options+=("zathura-cb" "allows zathura to view comics" off)
-	options+=("thunderbird" "email client" off)
-	options+=("liferea" "rss reader" off)
-	options+=("qbittorrent" "torrent client" off)
-	options+=("networkmanager-openvpn" "configuring openvpn" off)
-	options+=("network-manager-applet" "configuring openvpn" off)
-	options+=("code" "microsoft code" off)
-	options+=("steam" "videogames client" off)
-	options+=("discord" "discord client" off)
-	options+=("liquidctl" "kraken cpu cooler control" off)
-	options+=("mcomix" "manga reader" off)
+
+  # Printer
 	options+=("cups" "printers" off)
 	options+=("ghostscript" "required for my printer" off)
+	optionsA+=("epson-inkjet-printer-escpr" "my printer driver" off)
+
+  # Git repos
+	optionsG+=("dwmblocks" "dmw status bar" on)
+	optionsG+=("dmenu" "my build of dmenu" on)
+	optionsG+=("st" "my build of st" on)
+	optionsG+=("dwm" "my build of dwm" on)
+	optionsG+=("slock" "my build of slock" on)
+
+
 	sel=$(whiptail --backtitle "$apptitle" --title "Pacman Applications :" --checklist "Choose what you want" --cancel-button "Back" 0 0 0 \
 	  "${options[@]}" \
 	  3>&1 1>&2 2>&3)
@@ -156,18 +212,6 @@ customize() {
 	  esac
 	done
 
-	optionsA=()
-	optionsA+=("zsh-fast-syntax-highlighting" "shell syntax highlighting" on)
-	optionsA+=("dashbinsh" "adds dash to /bin/sh" on)
-	optionsA+=("gotop" "system monitor" on)
-	optionsA+=("lf" "cl file manager" on)
-	optionsA+=("brave-bin" "internet browser" on)
-	optionsA+=("vidir" "cl bulkrename utility" on)
-	optionsA+=("devour" "cl application swallowing" on)
-	optionsA+=("android-file-transfer" "accessing android devices" on)
-	optionsA+=("hakuneko-desktop" "manga downloader" off)
-	optionsA+=("freefilesync-bin" "syncing client" off)
-	optionsA+=("epson-inkjet-printer-escpr" "my printer driver" off)
 	selA=$(whiptail --backtitle "$apptitle" --title "AUR Applications :" --checklist "Choose what you want" --cancel-button "Back" 0 0 0 \
 	  "${optionsA[@]}" \
 	  3>&1 1>&2 2>&3)
@@ -180,12 +224,6 @@ customize() {
 	  esac
 	done
 
-	optionsG=()
-	optionsG+=("dwmblocks" "dmw status bar" on)
-	optionsG+=("dmenu" "my build of dmenu" on)
-	optionsG+=("st" "my build of st" on)
-	optionsG+=("dwm" "my build of dwm" on)
-	optionsG+=("slock" "my build of slock" on)
 	selG=$(whiptail --backtitle "$apptitle" --title "Git Applications :" --checklist "Choose what you want" --cancel-button "Back" 0 0 0 \
 	  "${optionsG[@]}" \
 	  3>&1 1>&2 2>&3)
@@ -212,7 +250,7 @@ customize() {
 	  esac
 	done
 
-echo "-----------Costomization Finished - Eject Install Media and Reboot-----------"
+echo "-----------Finished-----------"
 }
 
 echo "-----------Welcome to my Arch installscript-----------"
