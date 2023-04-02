@@ -95,6 +95,7 @@ customize() {
 	options+=("noto-fonts-cjk" "asian fonts" on)
 	options+=("ttf-font-awesome" "emojis" on)
 	options+=("ttf-joypixels" "emojis" on)
+	options+=("ttf-sourcecodepro-nerd" "patch nerd font" on)
 
   # Themes
 	options+=("arc-gtk-theme" "GTK theme" on)
