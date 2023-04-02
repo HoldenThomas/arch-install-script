@@ -165,6 +165,7 @@ customize() {
   # NetworkManager
 	options+=("networkmanager-openvpn" "configuring openvpn" off)
 	options+=("network-manager-applet" "configuring openvpn" off)
+	options+=("bmon" "terminal bandwidth app" off)
 
   # Zathura document viewer
 	options+=("zathura" "document viewer" on)
@@ -184,9 +185,12 @@ customize() {
 	options+=("atool" "lf zip preview" on)
 
   # Vim dependencies
-	options+=("npm" "Nodejs packaged modules for nvim coc" on)
-	options+=("python-pynvim" "Python neovim module for nvim coc" on)
-	options+=("ccls" "C language server for nvim coc" on)
+	options+=("npm" "js package maanger" on)
+	options+=("python-pynvim" "python neovim module" on)
+	options+=("wget" "network downloader" no)
+	options+=("unzip" "network downloader" no)
+	options+=("ripgrep" "grep tool for telescope" no)
+	options+=("fd" "find alternative for telescope" no)
 
   # Printer
 	options+=("cups" "printers" off)
