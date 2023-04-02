@@ -197,6 +197,9 @@ customize() {
 	options+=("ghostscript" "required for my printer" off)
 	optionsA+=("epson-inkjet-printer-escpr" "my printer driver" off)
 
+  # i3
+	options+=("i3" "i3 wm,blocks,lock" on)
+
   # Git repos
 	optionsG+=("dwmblocks" "dmw status bar" on)
 	optionsG+=("dmenu" "my build of dmenu" on)
