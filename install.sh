@@ -106,6 +106,7 @@ setup() {
     # File system utilities
     options+=("ntfs-3g" "accessing ntfs-partitions" on)
     options+=("cifs-utils" "accessing smba shares" on)
+    options+=("veracrypt" "access encrypted disks" on)
     optionsA+=("android-file-transfer" "accessing android devices" on)
 
     # Command line and shell
