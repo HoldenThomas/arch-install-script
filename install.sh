@@ -140,6 +140,7 @@ setup() {
 
     # Applications
     optionsA+=("brave-bin" "browser" on)
+    options+=("dmenu" "dynamic menu" on)
     options+=("mpv" "media player" on)
     options+=("sxiv" "image viewer" on)
     options+=("pcmanfm-gtk3" "file manager" on)
@@ -202,10 +203,8 @@ setup() {
 
     # Git repos
     optionsG+=("dwmblocks" "dmw status bar" on)
-    optionsG+=("dmenu" "my build of dmenu" on)
     optionsG+=("st" "my build of st" on)
     optionsG+=("dwm" "my build of dwm" on)
-    optionsG+=("slock" "my build of slock" on)
 
 
     sel=$(whiptail --backtitle "$apptitle" --title "Pacman Applications :" --checklist "Choose what you want" --cancel-button "Back" 0 0 0 \
