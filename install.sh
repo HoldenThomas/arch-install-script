@@ -61,7 +61,7 @@ baseArch() {
 setup() {
     git clone https://aur.archlinux.org/yay.git; cd yay; makepkg --noconfirm -si; cd; rm -rf yay
 
-    mkdir .dotfiles
+    mkdir ~/.dotfiles
     git clone --bare https://github.com/holdenthomas/dotfiles ~/.dotfiles
     git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME checkout
     git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME config status.showUntrackedFiles no
@@ -252,6 +252,7 @@ setup() {
             '"zsh"') chsh -s /usr/bin/zsh && mkdir -p ~/.cache/zsh;;
             '"bluez"') sudo systemctl enable bluetooth;;
             '"cups"') sudo systemctl enable cups;;
+            '"tmux"') git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm;;
         esac
     done
 
