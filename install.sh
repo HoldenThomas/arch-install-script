@@ -107,21 +107,18 @@ setup() {
     options+=("ntfs-3g" "accessing ntfs-partitions" on)
     options+=("cifs-utils" "accessing smba shares" on)
     options+=("veracrypt" "access encrypted disks" on)
-    optionsA+=("android-file-transfer" "accessing android devices" on)
+    options+=("android-file-transfer" "accessing android devices" on)
 
     # Command line and shell
     options+=("zsh" "shell" on)
-    optionsA+=("zsh-fast-syntax-highlighting" "shell syntax highlighting" on)
     options+=("starship" "shell prompt" on)
-    options+=("dash" "faster /bin/sh" on)
-    optionsA+=("dashbinsh" "adds dash to /bin/sh" on)
+    options+=("zsh-syntax-highlighting" "shell syntax highlighting" on)
+    options+=("zsh-autosuggestions" "shell autosuggestions" on)
 
     # Other command line apps
+    options+=("alacritty" "terminal" on)
     options+=("xclip" "copy & past from command line" on)
     options+=("xcape" "remapping keys" on)
-    options+=("reflector" "updating pacman mirrors" on)
-    options+=("p7zip" "extracting & archiving" on)
-    options+=("openssh" "ssh" on)
     options+=("rsync" "syncing" on)
     options+=("fzf" "fuzzy finder" on)
     options+=("bc" "cl calulator" on)
@@ -136,6 +133,7 @@ setup() {
     options+=("newsboat" "rss reader" on)
     optionsA+=("vidir" "command line bulkrename utility" on)
     optionsA+=("devour" "command line application swallowing" on)
+    optionsA+=("nordvpn-bin" "nordvpn cli tool" on)
     options+=("liquidctl" "kraken cpu cooler control" off)
 
     # Applications
@@ -175,10 +173,9 @@ setup() {
 
     # Password Storage
     options+=("gnome-keyring" "for storing application passwords" on)
-    options+=("seahorse" "for editing gnome-keyrings" on)
 
     # lf file manager
-    optionsA+=("lf" "cl file manager" on)
+    options+=("lf" "cl file manager" on)
     options+=("ueberzug" "lf image previews" on)
     options+=("mediainfo" "lf media info preview" on)
     options+=("bat" "lf text preview" on)
