@@ -79,7 +79,7 @@ Edit /usr/lib/python3.11/site-packages/youtube_dl/extractor/youtube.py and commi
 
 ## qemu/virt manager
 ```
-pacman -S qemu virt-manager virt-viewer dnsmasq vde2 bridge-utils openbsd-netcat libguestfs
+pacman -S qemu virt-manager virt-viewer dnsmasq iptables-nft vde2 bridge-utils openbsd-netcat libguestfs
 systemctl enable libvirtd --now
 ```
 Edit /etc/libvirt/libvirtd.conf and uncommit
