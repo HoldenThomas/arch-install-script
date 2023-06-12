@@ -70,3 +70,59 @@ Edit /etc/fstab
 ```
 /dev/mapper/<name> <mountpoint> ntfs3 noauto,x-systemd.automount,uid=<user>,gid=<group> 0 0
 ```
+
+## youtube-dl issues
+Edit /usr/lib/python3.11/site-packages/youtube_dl/extractor/youtube.py and commit out
+```
+'uploader_id': self._search_regex(r'/(?:channel|user)/([^/?&#]+)', owner_profile_url, 'uploader id') if owner_profile_url else None,
+```
+
+## qemu/virt manager
+```
+pacman -S qemu virt-manager virt-viewer dnsmasq vde2 bridge-utils openbsd-netcat libguestfs
+systemctl enable libvirtd --now
+```
+Edit /etc/libvirt/libvirtd.conf and uncommit
+```
+unix_sock_group = "libvirt"
+unix_sock_ro_perms = "0777"
+unix_sock_rw_perms = "0770"
+```
+```
+usermod -aG libvirt <user>
+systemctl restart libvirtd
+```
+Enable XML editing in preferences
+#### windows vm
+Edit XML
+delete these lines
+```
+<timer name="rtc" tickpolicy="catchup"/>
+<timer name="pit" tickpolicy="delay"/>
+```
+change this line from no to yes
+```
+<timer name="hpet" present="yes"/>
+```
+in cpus change topology
+```
+Sockets: 1
+Cores: 4
+Threads: 2
+```
+change Virtual Disk 1 bus to VirtIO
+
+change NIC Device model to VirtIO
+
+change video to VirtIO
+
+download drivers to recognize virtual disk (virtio-win.iso) from https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.215-2/
+
+add the iso drivers by clicking add hardware under storage select device type cdrom and adding the path to virtio.iso
+
+After booting install drivers for disks, ethernet, display
+
+## ufw firewall
+```
+systemctl enable ufw --now
+```
